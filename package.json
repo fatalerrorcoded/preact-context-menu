@@ -1,0 +1,27 @@
+{
+  "name": "preact-context-menu",
+  "version": "0.1.0",
+  "description": "A context menu in Preact",
+  "main": "dist/index.js",
+  "repository": "https://github.com/fatalerrorcoded/preact-context-menu",
+  "author": "FatalErrorCoded",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "dev": "webpack-dev-server",
+    "build": "tsc"
+  },
+  "dependencies": {
+    "preact": "^10.4.6"
+  },
+  "devDependencies": {
+    "css-loader": "^4.2.0",
+    "html-webpack-plugin": "^4.3.0",
+    "style-loader": "^1.2.1",
+    "ts-loader": "^8.0.2",
+    "typescript": "^3.9.7",
+    "webpack": "^4.44.1",
+    "webpack-cli": "^3.3.12",
+    "webpack-dev-server": "^3.11.0"
+  }
+}
