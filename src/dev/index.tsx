@@ -7,7 +7,6 @@ const TestElement = () => {
             <ContextMenu id="yes">
                 yes gay
             </ContextMenu>
-            <br />
             <ContextMenuTrigger id="yes">
                 ah yes
             </ContextMenuTrigger>
