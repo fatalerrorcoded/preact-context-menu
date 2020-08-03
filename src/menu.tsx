@@ -52,6 +52,13 @@ const ContextMenu = (props: ContextMenuProps) => {
         setRender(true);
     }, []);
 
+    const onClickAway = useCallback((event: MouseEvent) => {
+        if (ref.current && !ref.current.contains(event.target as any)) {
+            setRender(false);
+            setPlacement(undefined);
+        }
+    }, []);
+
     useEffect(() => {
         if (contextMenus.has(id)) throw new Error(`There is another ContextMenu element with the ID ${id}`);
         contextMenus.set(id, trigger);
@@ -81,9 +88,12 @@ const ContextMenu = (props: ContextMenuProps) => {
             }
 
             setPlacement({ x, y });
+            document.addEventListener('mousedown', onClickAway);
+            return () => document.removeEventListener('mousedown', onClickAway);
         } else {
             setPlacement(undefined);
             setEventCoords(undefined);
+            return undefined;
         }
     }, [render])
 
