@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "description": "A context menu in Preact",
   "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "repository": "https://github.com/fatalerrorcoded/preact-context-menu",
   "author": "FatalErrorCoded",
   "license": "MIT",
