@@ -4,6 +4,14 @@ import { createPortal } from "preact/compat";
 
 import { StyleSheet, css } from "aphrodite";
 
+type Coords = { x: number, y: number };
+
+type ContextMenuProps = Omit<Omit<JSX.HTMLAttributes<HTMLDivElement>, "id">, "ref"> & {
+    id: string,
+    children?: ComponentChildren,
+    onClose?: (data: any) => void
+}
+
 const styles = StyleSheet.create({
     preact_context_menu: {
         position: 'absolute',
@@ -24,15 +32,17 @@ const menuContainer = document.createElement("div");
 menuContainer.classList.add(css(styles.preact_context_menu));
 document.body.appendChild(menuContainer);
 
-export const contextMenus: Map<string, (event: MouseEvent) => void> = new Map();
+export const contextMenus: Map<string, (coords: Coords) => void> = new Map();
 export const MenuContext = createContext<((data: any) => void) | undefined>(undefined);
+let currentMouseCoords: Coords = { x: 0, y: 0 };
 
-type Coords = { x: number, y: number } | undefined;
+document.addEventListener("mousemove", (event: MouseEvent) =>
+    currentMouseCoords = { x: event.clientX, y: event.clientY });
 
-type ContextMenuProps = Omit<Omit<JSX.HTMLAttributes<HTMLDivElement>, "id">, "ref"> & {
-    id: string,
-    children?: ComponentChildren,
-    onClose?: (data: any) => void
+export const openContextMenu = (id: string, coords?: Coords) => {
+    const fn = contextMenus.get(id);
+    if (fn === undefined) throw new Error(`There is no ContextMenu with the ID ${id}`);
+    fn(coords || currentMouseCoords);
 }
 
 const ContextMenu = (props: ContextMenuProps) => {
@@ -46,12 +56,12 @@ const ContextMenu = (props: ContextMenuProps) => {
     } = props;
     
     const [render, setRender] = useState(false);
-    const [placement, setPlacement] = useState<Coords>(undefined);
-    const [eventCoords, setEventCoords] = useState<Coords>(undefined);
+    const [placement, setPlacement] = useState<Coords | undefined>(undefined);
+    const [eventCoords, setEventCoords] = useState<Coords | undefined>(undefined);
     const ref = useRef<HTMLDivElement>(null);
 
-    const trigger = useCallback((event: MouseEvent) => {
-        setEventCoords({ x: event.clientX, y: event.clientY });
+    const trigger = useCallback((coords: Coords) => {
+        setEventCoords(coords);
         setRender(true);
     }, []);
 
