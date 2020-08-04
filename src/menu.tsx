@@ -16,8 +16,7 @@ const styles = StyleSheet.create({
     },
     menu: {
         position: 'absolute',
-        pointerEvents: 'initial',
-        backgroundColor: "#FFFFFF",
+        pointerEvents: 'initial'
     }
 });
 
@@ -42,6 +41,7 @@ const ContextMenu = (props: ContextMenuProps) => {
         children,
         className,
         onClose,
+        style,
         ...divProps
     } = props;
     
@@ -102,23 +102,24 @@ const ContextMenu = (props: ContextMenuProps) => {
             return undefined;
         }
     }, [render])
-
-    if (className) className += ` ${css(styles.menu)}`;
-    else className = css(styles.menu);
+    
+    let finalClassName = css(styles.menu);
+    if (className) finalClassName += ` ${className}`;
     if (render) {
-        let style: any = {};
+        let finalStyle: any = style || {};
         if (placement !== undefined) {
-            style.top = placement.y;
-            style.left = placement.x;
+            finalStyle.top = placement.y;
+            finalStyle.left = placement.x;
+            if (!className && !finalStyle["background-color"]) finalStyle["background-color"] = "#FFFFFF";
         } else {
-            style.opacity = 0;
-            style["pointer-events"] = "none";
+            finalStyle.opacity = 0;
+            finalStyle["pointer-events"] = "none";
         }
 
         return createPortal(
             <MenuContext.Provider value={(data: any) => closeMenu(data)}>
                 <div ref={ref} id={id} {...divProps}
-                    className={className} style={style}
+                    className={finalClassName} style={finalStyle}
                 >{children}</div>
             </MenuContext.Provider>,
             menuContainer);

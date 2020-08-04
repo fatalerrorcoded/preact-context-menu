@@ -2,6 +2,18 @@ import { h, render } from "preact";
 import { useState, useCallback } from "preact/hooks";
 import { ContextMenu, ContextMenuTrigger, MenuItem } from "../index";
 
+import { StyleSheet, css } from "aphrodite";
+
+const styles = StyleSheet.create({
+    styled: {
+        backgroundColor: "#4a4a4a",
+        color: "#ffffff",
+        padding: "8px",
+        borderRadius: "8px",
+        fontFamily: "'Arial', sans-serif",
+    }
+});
+
 const DataTest = () => {
     const [data, setData] = useState<any>(undefined);
     const onClose = useCallback((data: any) => {
@@ -104,6 +116,13 @@ const TestElement = () => {
             </MenuItem>
             <h3>Data passing</h3>
             <DataTest />
+            <h3>Styling</h3>
+            <ContextMenu id="styling" className={css(styles.styled)}>
+                My Context Menu
+            </ContextMenu>
+            <ContextMenuTrigger id="styling">
+                Right-click me to open context menu!
+            </ContextMenuTrigger>
         </div>
     );
 }
