@@ -1,11 +1,20 @@
 {
   "name": "preact-context-menu",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A context menu in Preact",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "keywords": ["preact", "context-menu", "menu"],
+  "directories": {
+    "lib": "dist"
+  },
+  "homepage": "https://github.com/fatalerrorcoded/preact-context-menu#readme",
+  "bugs": "https://github.com/fatalerrorcoded/preact-context-menu/issues",
   "repository": "https://github.com/fatalerrorcoded/preact-context-menu",
-  "author": "FatalErrorCoded",
+  "contributors": [
+    "Martin Löffler <me@fatalerrorcoded.eu> (https://fatalerrorcoded.eu/)",
+    "Paul Makles (https://insrt.uk/)"
+  ],
   "license": "MIT",
   "private": false,
   "scripts": {
