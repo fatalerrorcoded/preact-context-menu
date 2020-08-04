@@ -1,5 +1,43 @@
 import { h, render } from "preact";
+import { useState, useCallback } from "preact/hooks";
 import { ContextMenu, ContextMenuTrigger, MenuItem } from "../index";
+
+const DataTest = () => {
+    const [data, setData] = useState<any>(undefined);
+    const onClose = useCallback((data: any) => {
+        console.log(data);
+        setData(data);
+    }, []);
+
+    return (
+        <div>
+            <div>Returned data: {data ? data.toString() : "undefined"}</div>
+            <br />
+            <ContextMenu id="data_passing" onClose={onClose}>
+                <ul>
+                    <li>
+                        <MenuItem data={1}>
+                            Click me to return 1!
+                        </MenuItem>
+                    </li>
+                    <li>
+                        <MenuItem data="yes">
+                            Or me to return "yes"!
+                        </MenuItem>
+                    </li>
+                    <li>
+                        <MenuItem data={{ yes: "indeed", number: 12 }}>
+                            Or me to return an object!
+                        </MenuItem>
+                    </li>
+                </ul>
+            </ContextMenu>
+            <ContextMenuTrigger id="data_passing">
+                Right-click me to open context menu!
+            </ContextMenuTrigger>
+        </div>
+    )
+}
 
 const TestElement = () => {
     return (
@@ -64,6 +102,8 @@ const TestElement = () => {
             <MenuItem>
                 Intentionally broken menu item.
             </MenuItem>
+            <h3>Data passing</h3>
+            <DataTest />
         </div>
     );
 }

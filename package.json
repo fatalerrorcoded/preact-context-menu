@@ -11,6 +11,7 @@
   "homepage": "https://github.com/fatalerrorcoded/preact-context-menu#readme",
   "bugs": "https://github.com/fatalerrorcoded/preact-context-menu/issues",
   "repository": "https://github.com/fatalerrorcoded/preact-context-menu",
+  "readme": "README.md",
   "contributors": [
     "Martin Löffler <me@fatalerrorcoded.eu> (https://fatalerrorcoded.eu/)",
     "Paul Makles (https://insrt.uk/)"

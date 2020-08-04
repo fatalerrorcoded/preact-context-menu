@@ -63,8 +63,7 @@ const ContextMenu = (props: ContextMenuProps) => {
 
     const onClickAway = useCallback((event: MouseEvent) => {
         if (ref.current && !ref.current.contains(event.target as any)) {
-            setRender(false);
-            setPlacement(undefined);
+            closeMenu(undefined);
         }
     }, []);
 
