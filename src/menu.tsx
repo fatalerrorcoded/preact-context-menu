@@ -1,4 +1,4 @@
-import { h, JSX, ComponentChildren } from "preact";
+import { h, JSX, ComponentChildren, createContext } from "preact";
 import { useState, useRef, useEffect, useCallback } from "preact/hooks";
 import { createPortal } from "preact/compat";
 
@@ -26,6 +26,7 @@ menuContainer.classList.add(css(styles.preact_context_menu));
 document.body.appendChild(menuContainer);
 
 export const contextMenus: Map<string, (event: MouseEvent) => void> = new Map();
+export const MenuContext = createContext<(() => void) | undefined>(undefined);
 
 type Coords = { x: number, y: number } | undefined;
 
@@ -110,9 +111,11 @@ const ContextMenu = (props: ContextMenuProps) => {
         }
 
         return createPortal(
-            <div ref={ref} id={id} {...divProps}
-                className={className} style={style}
-            >{children}</div>,
+            <MenuContext.Provider value={() => { setRender(false); setPlacement(undefined); }}>
+                <div ref={ref} id={id} {...divProps}
+                    className={className} style={style}
+                >{children}</div>
+            </MenuContext.Provider>,
             menuContainer);
     } else {
         return null;
