@@ -28,6 +28,8 @@ const styles = StyleSheet.create({
     }
 });
 
+const offset = 8;
+
 const menuContainer = document.createElement("div");
 menuContainer.classList.add(css(styles.preact_context_menu));
 document.body.appendChild(menuContainer);
@@ -42,7 +44,7 @@ document.addEventListener("mousemove", (event: MouseEvent) =>
 export const openContextMenu = (id: string, coords?: Coords) => {
     const fn = contextMenus.get(id);
     if (fn === undefined) throw new Error(`There is no ContextMenu with the ID ${id}`);
-    fn(coords || currentMouseCoords);
+    fn(coords ? { x: coords.x - offset, y: coords.y - offset } : currentMouseCoords);
 }
 
 const ContextMenu = (props: ContextMenuProps) => {
@@ -90,8 +92,8 @@ const ContextMenu = (props: ContextMenuProps) => {
             const div = ref.current;
             if (div === null) return;
             const eventCoords2 = eventCoords || {x: 0, y: 0};
-            let x = eventCoords2.x + 8;
-            let y = eventCoords2.y + 8;
+            let x = eventCoords2.x + offset;
+            let y = eventCoords2.y + offset;
             const width = document.documentElement.scrollWidth;
             const height = document.documentElement.scrollHeight;
 
