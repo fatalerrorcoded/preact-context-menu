@@ -26,13 +26,14 @@ menuContainer.classList.add(css(styles.preact_context_menu));
 document.body.appendChild(menuContainer);
 
 export const contextMenus: Map<string, (event: MouseEvent) => void> = new Map();
-export const MenuContext = createContext<(() => void) | undefined>(undefined);
+export const MenuContext = createContext<((data: any) => void) | undefined>(undefined);
 
 type Coords = { x: number, y: number } | undefined;
 
 type ContextMenuProps = Omit<Omit<JSX.HTMLAttributes<HTMLDivElement>, "id">, "ref"> & {
     id: string,
-    children?: ComponentChildren
+    children?: ComponentChildren,
+    onClose?: (data: any) => void
 }
 
 const ContextMenu = (props: ContextMenuProps) => {
@@ -40,6 +41,7 @@ const ContextMenu = (props: ContextMenuProps) => {
         id,
         children,
         className,
+        onClose,
         ...divProps
     } = props;
     
@@ -52,6 +54,12 @@ const ContextMenu = (props: ContextMenuProps) => {
         setEventCoords({ x: event.clientX, y: event.clientY });
         setRender(true);
     }, []);
+
+    const closeMenu = useCallback((data: any) => {
+        setRender(false);
+        setPlacement(undefined);
+        if (props.onClose !== undefined) props.onClose(data);
+    }, [props.onClose]);
 
     const onClickAway = useCallback((event: MouseEvent) => {
         if (ref.current && !ref.current.contains(event.target as any)) {
@@ -109,7 +117,7 @@ const ContextMenu = (props: ContextMenuProps) => {
         }
 
         return createPortal(
-            <MenuContext.Provider value={() => { setRender(false); setPlacement(undefined); }}>
+            <MenuContext.Provider value={(data: any) => closeMenu(data)}>
                 <div ref={ref} id={id} {...divProps}
                     className={className} style={style}
                 >{children}</div>
