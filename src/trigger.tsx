@@ -5,6 +5,7 @@ import { contextMenus } from "./menu";
 
 type ContextMenuTriggerProps = {
     id: string,
+    data?: any
     children?: ComponentChildren
 }
 
@@ -13,7 +14,7 @@ const ContextMenuTrigger = (props: ContextMenuTriggerProps) => {
         let fn = contextMenus.get(props.id);
         if (fn === undefined) throw new Error(`There is no ContextMenu with the ID ${props.id}`);
         event.preventDefault();
-        fn({ x: event.clientX, y: event.clientY });
+        fn({ x: event.clientX, y: event.clientY }, props.data);
     }, [props.id]);
 
     return <span onContextMenu={onContextMenu}>{props.children}</span>;

@@ -6,10 +6,14 @@ import { StyleSheet, css } from "aphrodite";
 
 type Coords = { x: number, y: number };
 
-type ContextMenuProps = Omit<Omit<JSX.HTMLAttributes<HTMLDivElement>, "id">, "ref"> & {
+type ContextMenuWithDataProps = Omit<Omit<JSX.HTMLAttributes<HTMLDivElement>, "id">, "ref"> & {
     id: string,
-    children?: ComponentChildren,
-    onClose?: (data: any) => void
+    children: (data: any) => ComponentChildren,
+    onClose?: (data: any) => void,
+}
+
+type ContextMenuProps = Omit<ContextMenuWithDataProps, "children"> & {
+    children: ComponentChildren,
 }
 
 const styles = StyleSheet.create({
@@ -34,20 +38,20 @@ const menuContainer = document.createElement("div");
 menuContainer.classList.add(css(styles.preact_context_menu));
 document.body.appendChild(menuContainer);
 
-export const contextMenus: Map<string, (coords: Coords) => void> = new Map();
+export const contextMenus: Map<string, (coords: Coords, data: any) => void> = new Map();
 export const MenuContext = createContext<((data: any) => void) | undefined>(undefined);
 let currentMouseCoords: Coords = { x: 0, y: 0 };
 
 document.addEventListener("mousemove", (event: MouseEvent) =>
     currentMouseCoords = { x: event.clientX, y: event.clientY });
 
-export const openContextMenu = (id: string, coords?: Coords) => {
+export const openContextMenu = (id: string, data?: any, coords?: Coords) => {
     const fn = contextMenus.get(id);
     if (fn === undefined) throw new Error(`There is no ContextMenu with the ID ${id}`);
-    fn(coords ? { x: coords.x - offset, y: coords.y - offset } : currentMouseCoords);
+    fn(coords ? { x: coords.x - offset, y: coords.y - offset } : currentMouseCoords, data);
 }
 
-const ContextMenu = (props: ContextMenuProps) => {
+export const ContextMenuWithData = (props: ContextMenuWithDataProps) => {
     let {
         id,
         children,
@@ -60,16 +64,19 @@ const ContextMenu = (props: ContextMenuProps) => {
     const [render, setRender] = useState(false);
     const [placement, setPlacement] = useState<Coords | undefined>(undefined);
     const [eventCoords, setEventCoords] = useState<Coords | undefined>(undefined);
+    const [data, setData] = useState<any>(undefined);
     const ref = useRef<HTMLDivElement>(null);
 
-    const trigger = useCallback((coords: Coords) => {
+    const trigger = useCallback((coords: Coords, data: any) => {
         setEventCoords(coords);
         setRender(true);
+        setData(data);
     }, []);
 
     const closeMenu = useCallback((data: any) => {
         setRender(false);
         setPlacement(undefined);
+        setData(undefined);
         if (props.onClose !== undefined) props.onClose(data);
     }, [props.onClose]);
 
@@ -132,12 +139,24 @@ const ContextMenu = (props: ContextMenuProps) => {
             <MenuContext.Provider value={(data: any) => closeMenu(data)}>
                 <div ref={ref} id={id} {...divProps}
                     className={finalClassName} style={finalStyle}
-                >{children}</div>
+                >{children(data)}</div>
             </MenuContext.Provider>,
             menuContainer);
     } else {
         return null;
     }
+}
+
+const ContextMenu = (props: ContextMenuProps) => {
+    let {
+        children,
+        ...rest
+    } = props;
+    return (
+        <ContextMenuWithData {...rest}>
+            {(_) => children}
+        </ContextMenuWithData>
+    );
 }
 
 export default ContextMenu;
