@@ -71,7 +71,6 @@ const ContextMenu = (props: ContextMenuProps) => {
     useEffect(() => {
         if (render) {
             const div = ref.current;
-            console.log(div);
             if (div === null) return;
             const eventCoords2 = eventCoords || {x: 0, y: 0};
             let x = eventCoords2.x + 8;
@@ -79,7 +78,6 @@ const ContextMenu = (props: ContextMenuProps) => {
             const width = document.documentElement.scrollWidth;
             const height = document.documentElement.scrollHeight;
 
-            console.log(x, div.offsetWidth, width - 8);
             if (x + div.offsetWidth > width - 8) {
                 x = eventCoords2.x - div.offsetWidth;
             }

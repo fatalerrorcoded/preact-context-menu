@@ -1,5 +1,5 @@
 import { h, render } from "preact";
-import { ContextMenu, ContextMenuTrigger } from "../index";
+import { ContextMenu, ContextMenuTrigger, MenuItem } from "../index";
 
 const TestElement = () => {
     return (
@@ -33,10 +33,37 @@ const TestElement = () => {
                     </ContextMenuTrigger>
                 </li>
             </ul>
+            <h3>Menu items</h3>
+            <ContextMenu id="items">
+                <ul>
+                    <li>
+                        <MenuItem>
+                            Click me to close the menu!
+                        </MenuItem>
+                    </li>
+                    <li>
+                        <MenuItem>
+                            Or me!
+                        </MenuItem>
+                    </li>
+                    <li>
+                        <MenuItem>
+                            Or even me!
+                        </MenuItem>
+                    </li>
+                </ul>
+            </ContextMenu>
+            <ContextMenuTrigger id="items">
+                Right-click me to open context menu!
+            </ContextMenuTrigger>
             <h3>Error handling.</h3>
             <ContextMenuTrigger id="broken">
-                Intentionally broken, can't right-click me.
+                Intentionally broken trigger, can't right-click me.
             </ContextMenuTrigger>
+            <br /><br />
+            <MenuItem>
+                Intentionally broken menu item.
+            </MenuItem>
         </div>
     );
 }
