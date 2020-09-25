@@ -4,7 +4,11 @@
   "description": "A context menu in Preact",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "keywords": ["preact", "context-menu", "menu"],
+  "keywords": [
+    "preact",
+    "context-menu",
+    "menu"
+  ],
   "directories": {
     "lib": "dist"
   },
