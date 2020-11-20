@@ -130,7 +130,7 @@ export const ContextMenuWithData = (props: ContextMenuWithDataProps) => {
 
         return createPortal(
             <MenuContext.Provider value={(data: any) => closeMenu(data)}>
-                <div ref={ref} id={id} {...divProps}
+                <div ref={ref} id={id} {...divProps as any}
                     className="menu" style={finalStyle}
                 >{children(data)}</div>
             </MenuContext.Provider>,

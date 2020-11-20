@@ -17,7 +17,7 @@ const ContextMenuTrigger = (props: ContextMenuTriggerProps) => {
         fn({ x: event.clientX, y: event.clientY }, props.data);
     }, [props.id]);
 
-    return <span onContextMenu={onContextMenu}>{props.children}</span>;
+    return <span onContextMenu={onContextMenu as any}>{props.children}</span>;
 }
 
 export default ContextMenuTrigger;
