@@ -1,0 +1,9 @@
+.preact-context-menu {
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.preact-context-menu .context-menu {
+    position: fixed;
+    pointer-events: initial;
+}

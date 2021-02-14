@@ -27,7 +27,6 @@
     "build": "tsc"
   },
   "dependencies": {
-    "aphrodite": "^2.4.0",
     "preact": "^10.4.6"
   },
   "devDependencies": {

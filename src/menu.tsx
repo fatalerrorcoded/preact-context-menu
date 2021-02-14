@@ -1,3 +1,5 @@
+import "./menu.css";
+
 import { h, JSX, ComponentChildren, createContext } from "preact";
 import { useState, useRef, useEffect, useCallback } from "preact/hooks";
 import { createPortal } from "preact/compat";
@@ -22,18 +24,6 @@ let currentMouseCoords: Coords = { x: 0, y: 0 };
 var menuContainer: Element;
 
 if (typeof window !== 'undefined') {
-    let styleSheet = document.createElement("style");
-    styleSheet.innerHTML = `.preact-context-menu {
-    overflow: hidden;
-    pointer-events: none;
-}
-
-.preact-context-menu .menu {
-    position: fixed;
-    pointer-events: initial;
-}`;
-    document.body.appendChild(styleSheet);
-
     menuContainer = document.createElement("div");
     menuContainer.classList.add("preact-context-menu");
     document.body.appendChild(menuContainer);
@@ -131,7 +121,7 @@ export const ContextMenuWithData = (props: ContextMenuWithDataProps) => {
         return createPortal(
             <MenuContext.Provider value={(data: any) => closeMenu(data)}>
                 <div ref={ref} id={id} {...divProps as any}
-                    className="menu" style={finalStyle}
+                    className={className !== undefined ? `context-menu ${className}` : "context-menu"} style={finalStyle}
                 >{children(data)}</div>
             </MenuContext.Provider>,
             menuContainer);
