@@ -89,16 +89,16 @@ export const ContextMenuWithData = (props: ContextMenuWithDataProps) => {
             let x = coords.x + offset;
             let y = coords.y + offset;
 
-            //const width = document.documentElement.scrollWidth;
-            //const height = document.documentElement.scrollHeight;
+            const width = window.innerWidth;
+            const height = window.innerHeight;
 
-            /*if (x + div.offsetWidth > width - 8) {
-                x = eventCoords2.x - div.offsetWidth;
+            if (x + div.offsetWidth > width - 8) {
+                x = coords.x - div.offsetWidth;
             }
 
             if (y + div.offsetHeight > height - 8) {
                 y = height - div.offsetHeight - 8;
-            }*/
+            }
 
             setPlacement({ x, y });
             document.addEventListener('mousedown', onClickAway);
