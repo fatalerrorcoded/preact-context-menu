@@ -82,6 +82,11 @@ const TestElement = () => {
                         Or this one!
                     </ContextMenuTrigger>
                 </li>
+                <li>
+                    <ContextMenuTrigger id="multiple" disabled>
+                        But you can't use me since I am disabled
+                    </ContextMenuTrigger>
+                </li>
             </ul>
             <h3>Menu items</h3>
             <ContextMenu id="items">
@@ -99,6 +104,11 @@ const TestElement = () => {
                     <li>
                         <MenuItem>
                             Or even me!
+                        </MenuItem>
+                    </li>
+                    <li>
+                        <MenuItem disabled>
+                            But you can't use me since I am disabled
                         </MenuItem>
                     </li>
                 </ul>
