@@ -1,5 +1,3 @@
-import "./menu.css";
-
 import { h, JSX, ComponentChildren, createContext } from "preact";
 import { useState, useRef, useEffect, useCallback } from "preact/hooks";
 import { createPortal } from "preact/compat";
@@ -26,6 +24,7 @@ var menuContainer: Element;
 if (typeof window !== 'undefined') {
     menuContainer = document.createElement("div");
     menuContainer.classList.add("preact-context-menu");
+    menuContainer.setAttribute("style", "overflow: hidden; pointer-events: none;");
     document.body.appendChild(menuContainer);
 
     document.addEventListener("mousemove", (event: MouseEvent) =>
@@ -110,9 +109,11 @@ export const ContextMenuWithData = (props: ContextMenuWithDataProps) => {
     
     if (render) {
         let finalStyle: any = style || {};
+        finalStyle.position = "fixed";
         if (placement !== undefined) {
             finalStyle.top = placement.y;
             finalStyle.left = placement.x;
+            finalStyle.pointerEvents = "initial";
         } else {
             finalStyle.opacity = 0;
             finalStyle.pointerEvents = "none";
