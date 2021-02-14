@@ -9,7 +9,8 @@ type MenuItemProps = {
 }
 
 const MenuItem = (props: MenuItemProps) => {
-    const onClick = useCallback((fn: ((data: any) => void) | undefined, data: any) => {
+    const onClick = useCallback((event: h.JSX.TargetedEvent, fn: ((data: any) => void) | undefined, data: any) => {
+        event.stopPropagation();
         if (fn === undefined) throw new Error(`MenuItem is not inside a ContextMenu`);
         fn(data);
     }, []);
@@ -17,7 +18,7 @@ const MenuItem = (props: MenuItemProps) => {
     return (
         <MenuContext.Consumer>
             {(fn) => (
-                <span onClick={() => onClick(fn, props.data)}>{props.children}</span>
+                <span onClick={(event) => onClick(event, fn, props.data)}>{props.children}</span>
             )}
         </MenuContext.Consumer>
     );

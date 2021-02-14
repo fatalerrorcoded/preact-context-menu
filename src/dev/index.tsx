@@ -123,6 +123,18 @@ const TestElement = () => {
             <ContextMenuTrigger id="styling">
                 Right-click me to open context menu!
             </ContextMenuTrigger>
+            <h3>Nesting</h3>
+            <ContextMenu id="nested1">
+                <ContextMenuTrigger id="nested2">
+                    Right-click me to open <i>another</i> context menu!
+                </ContextMenuTrigger>
+            </ContextMenu>
+            <ContextMenu id="nested2">
+                A nested context menu!
+            </ContextMenu>
+            <ContextMenuTrigger id="nested1">
+                Right-click me to open context menu!
+            </ContextMenuTrigger>
         </div>
     );
 }
