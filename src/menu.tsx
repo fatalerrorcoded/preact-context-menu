@@ -6,7 +6,7 @@ import { createPortal } from "preact/compat";
 
 type Coords = { x: number, y: number };
 
-type ContextMenuWithDataProps = Omit<Omit<JSX.HTMLAttributes<HTMLDivElement>, "id">, "ref"> & {
+type ContextMenuWithDataProps = Omit<Omit<Omit<JSX.HTMLAttributes<HTMLDivElement>, "id">, "ref">, "onContextMenu"> & {
     id: string,
     children: (data: any) => ComponentChildren,
     onClose?: (data: any) => void,
@@ -121,6 +121,8 @@ export const ContextMenuWithData = (props: ContextMenuWithDataProps) => {
         return createPortal(
             <MenuContext.Provider value={(data: any) => closeMenu(data)}>
                 <div ref={ref} id={id} {...divProps as any}
+                    // This is to stop the browser context menu from opening
+                    onContextMenu={(event) => event.preventDefault()}
                     className={className !== undefined ? `context-menu ${className}` : "context-menu"} style={finalStyle}
                 >{children(data)}</div>
             </MenuContext.Provider>,
