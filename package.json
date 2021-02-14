@@ -23,6 +23,7 @@
   "license": "MIT",
   "private": false,
   "scripts": {
+    "prepublish": "in-publish && tsc || echo Skipping build.",
     "dev": "webpack-dev-server",
     "build": "tsc"
   },
@@ -32,6 +33,7 @@
   "devDependencies": {
     "css-loader": "^4.2.0",
     "html-webpack-plugin": "^4.3.0",
+    "in-publish": "^2.0.1",
     "style-loader": "^1.2.1",
     "ts-loader": "^8.0.2",
     "typescript": "^3.9.7",
