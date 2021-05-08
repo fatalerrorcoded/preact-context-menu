@@ -18,7 +18,7 @@ const ContextMenuTrigger = (props: ContextMenuTriggerProps) => {
         event.stopPropagation();
         event.preventDefault();
         fn({ x: event.clientX, y: event.clientY }, props.data);
-    }, [props.id]);
+    }, [props.id, props.data]);
 
     return <span onContextMenu={onContextMenu as any}>{props.children}</span>;
 }
