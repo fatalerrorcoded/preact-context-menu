@@ -2,7 +2,7 @@ import { h, JSX, ComponentChildren, createContext } from "preact";
 import { useState, useRef, useEffect, useCallback } from "preact/hooks";
 import { createPortal } from "preact/compat";
 
-type Coords = { x: number, y: number };
+export type Coords = { x: number, y: number };
 
 type ContextMenuWithDataProps = Omit<Omit<Omit<JSX.HTMLAttributes<HTMLDivElement>, "id">, "ref">, "onContextMenu"> & {
     id: string,
@@ -14,11 +14,11 @@ type ContextMenuProps = Omit<ContextMenuWithDataProps, "children"> & {
     children: ComponentChildren,
 }
 
-const offset = 8;
+export let menuOffset = 8;
 
 export const contextMenus: Map<string, (coords: Coords, data: any) => void> = new Map();
 export const MenuContext = createContext<((data: any) => void) | undefined>(undefined);
-let currentMouseCoords: Coords = { x: 0, y: 0 };
+
 var menuContainer: Element;
 
 if (typeof window !== 'undefined') {
@@ -26,15 +26,6 @@ if (typeof window !== 'undefined') {
     menuContainer.classList.add("preact-context-menu");
     menuContainer.setAttribute("style", "overflow: hidden; pointer-events: none;");
     document.body.appendChild(menuContainer);
-
-    document.addEventListener("mousemove", (event: MouseEvent) =>
-        currentMouseCoords = { x: event.clientX, y: event.clientY });
-}
-
-export const openContextMenu = (id: string, data?: any, coords?: Coords) => {
-    const fn = contextMenus.get(id);
-    if (fn === undefined) throw new Error(`There is no ContextMenu with the ID ${id}`);
-    fn(coords ? { x: coords.x - offset, y: coords.y - offset } : currentMouseCoords, data);
 }
 
 export const ContextMenuWithData = (props: ContextMenuWithDataProps) => {
@@ -85,8 +76,8 @@ export const ContextMenuWithData = (props: ContextMenuWithDataProps) => {
             const div = ref.current;
             if (div === null) return;
             let coords = eventCoords || {x: 0, y: 0};
-            let x = coords.x + offset;
-            let y = coords.y + offset;
+            let x = coords.x + menuOffset;
+            let y = coords.y + menuOffset;
 
             const width = window.innerWidth;
             const height = window.innerHeight;
