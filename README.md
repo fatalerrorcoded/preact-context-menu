@@ -36,7 +36,7 @@ function Component() {
 }
 ```
 
-### Opening and closing the menus
+### Opening and closing menus
 
 Besides closing when clicked outside of, a menu can also be closed when a MenuItem is clicked or when you call the function provided from the MenuContext that can be imported from `preact-context-menu/menu`
 
@@ -73,7 +73,34 @@ function Menu() {
 }
 ```
 
-A context menu can also be opened by calling the openContextMenu function with the context menu ID and optionally the coordinates where the context menu should appear
+If you want to avoid wrapping your component in a span that listens for the browser's context menu event, you can use attachContextMenu to create a trigger out of any component, optionally passing any extra data.
+
+```jsx
+import { h } from "preact";
+import { ContextMenu, attachContextMenu } from "preact-context-menu";
+
+function Component() {
+    return (
+        <div>
+            <ContextMenu id="unique_id">
+                My Context Menu
+            </ContextMenu>
+            <div onContextMenu={attachContextMenu("unique_id")}>
+                Right-click me to open context menu!
+            </div>
+            <div onContextMenu={attachContextMenu("unique_id", { hello: "Hello, world!" })}>
+                Right-click me to open context menu with data!
+            </div>
+        </div>
+    );
+}
+```
+
+#### Opening a menu programatically
+
+A context menu can also be opened by calling the openContextMenu function with the context menu ID and optionally any data and/or the coordinates where the context menu should appear
+
+A context menu will open at the last known mouse location if no coordinates are provided.
 
 ```js
 import { openContextMenu } from "preact-context-menu";
@@ -81,8 +108,69 @@ import { openContextMenu } from "preact-context-menu";
 openContextMenu("unique_id");
 
 // Or with the coordinates
-openContextMenu("unique_id", {
+openContextMenu("unique_id", {}, {
     x: 30,
     y: 10,
-})
+});
+
+// Providing extra data
+openContextMenu("unique_id", { hello: "Hello, world!" });
+```
+
+### Getting data into and out of a menu
+
+For getting data into a context menu, you can use a ContextMenuWithData, which instead of an element, takes a function that passes the data down
+
+```jsx
+import { h } from "preact";
+import { ContextMenuWithData } from "preact-context-menu";
+
+function Menu() {
+    return (
+        <ContextMenuWithData id="unique_id">
+            {(data) => (
+                <span>{JSON.stringify(data)}</span>
+            )}
+        </ContextMenuWithData>
+    );
+}
+```
+
+To get data out of a context menu containing menu items, you can use the onClose prop on the context menu to detect when the menu is closed either by clicking on a menu item, or outside the menu
+
+When the menu is closed by clicking outside of it, onClose will be passed `undefined` as the data argument.
+
+```jsx
+import { h } from "preact";
+import { useState } from "preact/hooks";
+import { ContextMenu } from "preact-context-menu";
+
+function Component() {
+    const [data, setData] = useState<any>(undefined);
+    const onClose = useCallback((data: any) => {
+        console.log(data);
+        setData(data);
+    }, []);
+
+    return (
+        <div>
+            <div>Returned data: {data ? data.toString() : "undefined"}</div>
+            <br />
+            <ContextMenu id="unique_id" onClose={onClose}>
+                <ul>
+                    <li>
+                        <MenuItem data={1}>
+                            Click me to return 1!
+                        </MenuItem>
+                    </li>
+                    <li>
+                        <MenuItem data="Hello, world!">
+                            Or me to return "Hello, world!"!
+                        </MenuItem>
+                    </li>
+                </ul>
+            </ContextMenu>
+        </div>
+    );
+}
 ```
