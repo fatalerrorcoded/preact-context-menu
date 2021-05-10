@@ -1,7 +1,7 @@
 import { h, ComponentChildren, JSX } from "preact";
 import { useCallback } from "preact/hooks";
 
-import { contextMenus } from "./menu";
+import { openContextMenu } from "./util";
 
 type ContextMenuTriggerProps = {
     id: string,
@@ -13,11 +13,9 @@ type ContextMenuTriggerProps = {
 const ContextMenuTrigger = (props: ContextMenuTriggerProps) => {
     const onContextMenu = useCallback((event: JSX.TargetedEvent<HTMLSpanElement, MouseEvent>) => {
         if (props.disabled === true) return;
-        let fn = contextMenus.get(props.id);
-        if (fn === undefined) throw new Error(`There is no ContextMenu with the ID ${props.id}`);
+        openContextMenu(props.id, props.data, { x: event.clientX, y: event.clientY });
         event.stopPropagation();
         event.preventDefault();
-        fn({ x: event.clientX, y: event.clientY }, props.data);
     }, [props.id, props.data]);
 
     return <span onContextMenu={onContextMenu as any}>{props.children}</span>;
