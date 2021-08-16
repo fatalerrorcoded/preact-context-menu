@@ -7,6 +7,7 @@ export type Coords = { x: number, y: number };
 type ContextMenuWithDataProps = Omit<Omit<Omit<JSX.HTMLAttributes<HTMLDivElement>, "id">, "ref">, "onContextMenu"> & {
     id: string,
     children: (data: any) => ComponentChildren,
+    shouldOpen?: (data: any) => boolean,
     onClose?: (data: any) => void,
 }
 
@@ -33,6 +34,7 @@ export const ContextMenuWithData = (props: ContextMenuWithDataProps) => {
         id,
         children,
         className,
+        shouldOpen,
         onClose,
         style,
         ...divProps
@@ -45,6 +47,7 @@ export const ContextMenuWithData = (props: ContextMenuWithDataProps) => {
     const ref = useRef<HTMLDivElement>(null);
 
     const trigger = useCallback((coords: Coords, data: any) => {
+        if (shouldOpen !== undefined && !shouldOpen(data)) return;
         setEventCoords(coords);
         setRender(true);
         setData(data);
