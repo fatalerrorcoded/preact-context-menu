@@ -51,7 +51,7 @@ export const ContextMenuWithData = (props: ContextMenuWithDataProps) => {
         setEventCoords(coords);
         setRender(true);
         setData(data);
-    }, []);
+    }, [shouldOpen]);
 
     const closeMenu = useCallback((data: any) => {
         setRender(false);
