@@ -41,6 +41,7 @@ export const ContextMenuWithData = (props: ContextMenuWithDataProps) => {
     } = props;
     
     const [render, setRender] = useState(false);
+    const [wasOpen, setWasOpen] = useState(false);
     const [placement, setPlacement] = useState<Coords | undefined>(undefined);
     const [eventCoords, setEventCoords] = useState<Coords | undefined>(undefined);
     const [data, setData] = useState<any>(undefined);
@@ -114,12 +115,14 @@ export const ContextMenuWithData = (props: ContextMenuWithDataProps) => {
         }
 
         let out = children(data);
-        if (!out || out === []) {
+        if (!wasOpen && (!out || out === [])) {
             setRender(false);
             setPlacement(undefined);
             setData(undefined);
             return null;
         }
+
+        setWasOpen(true);
 
         return createPortal(
             <MenuContext.Provider value={(data: any) => closeMenu(data)}>
@@ -131,6 +134,7 @@ export const ContextMenuWithData = (props: ContextMenuWithDataProps) => {
             </MenuContext.Provider>,
             menuContainer);
     } else {
+        setWasOpen(false);
         return null;
     }
 }
