@@ -115,7 +115,7 @@ export const ContextMenuWithData = (props: ContextMenuWithDataProps) => {
         }
 
         let out = children(data);
-        if (!wasOpen && (!out || out === [])) {
+        if (!wasOpen && (!out || (out as Array<unknown>).length === 0)) {
             setRender(false);
             setPlacement(undefined);
             setData(undefined);
