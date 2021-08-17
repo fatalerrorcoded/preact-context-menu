@@ -113,13 +113,21 @@ export const ContextMenuWithData = (props: ContextMenuWithDataProps) => {
             finalStyle.pointerEvents = "none";
         }
 
+        let out = children(data);
+        if (!out || out === []) {
+            setRender(false);
+            setPlacement(undefined);
+            setData(undefined);
+            return null;
+        }
+
         return createPortal(
             <MenuContext.Provider value={(data: any) => closeMenu(data)}>
                 <div ref={ref} id={id} {...divProps as any}
                     // This is to stop the browser context menu from opening
                     onContextMenu={(event) => event.preventDefault()}
                     className={className !== undefined ? `context-menu ${className}` : "context-menu"} style={finalStyle}
-                >{children(data)}</div>
+                >{out}</div>
             </MenuContext.Provider>,
             menuContainer);
     } else {
