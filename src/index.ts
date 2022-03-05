@@ -1,5 +1,7 @@
+// Re-export context menu components.
 export { default as ContextMenu, ContextMenuWithData } from './menu';
 export { default as ContextMenuTrigger } from './trigger';
 export { default as MenuItem } from './item';
 
-export { openContextMenu, attachContextMenu } from './util';
+// Re-export utility functions.
+export { openContextMenu, useContextMenu, refContextMenu } from './util';
