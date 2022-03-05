@@ -1,5 +1,5 @@
 import { h, ComponentChildren, JSX } from "preact";
-import { useCallback } from "preact/hooks";
+import { useCallback, useRef } from "preact/hooks";
 
 import { openContextMenu } from "./util";
 
@@ -8,17 +8,50 @@ type ContextMenuTriggerProps = {
     data?: any,
     children?: ComponentChildren,
     disabled?: boolean,
+    touchTimeout?: number
 }
 
+/**
+ * Component which wraps around other components to provide a context menu trigger area.
+ * @param props Trigger props
+ * @returns Component
+ */
 const ContextMenuTrigger = (props: ContextMenuTriggerProps) => {
-    const onContextMenu = useCallback((event: JSX.TargetedEvent<HTMLSpanElement, MouseEvent>) => {
+    // For most browsers, we can use onContextMenu.
+    const onContextMenu = useCallback((event: JSX.TargetedMouseEvent<HTMLSpanElement>) => {
         if (props.disabled === true) return;
         openContextMenu(props.id, props.data, { x: event.clientX, y: event.clientY });
         event.stopPropagation();
         event.preventDefault();
     }, [props.id, props.data]);
 
-    return <span onContextMenu={onContextMenu as any}>{props.children}</span>;
+    const timeoutRef = useRef<number>();
+
+    // On iOS devices, we need to manually handle the touch events.
+    const onTouchStart = useCallback((event: JSX.TargetedTouchEvent<HTMLSpanElement>) => {
+        if (props.disabled === true) return;
+        event.stopPropagation();
+        event.preventDefault();
+
+        const touch = event.touches[0];
+        
+        clearTimeout(timeoutRef.current);
+        timeoutRef.current = setTimeout(() => {
+            openContextMenu(props.id, props.data, { x: touch.clientX, y: touch.clientY });
+        }, props.touchTimeout ?? 610) as unknown as number;
+    }, [props.id, props.data]);
+
+    // Cancel context menu if we move, end or cancel the touch.
+    const onTouchCancel = useCallback(() => {
+        clearTimeout(timeoutRef.current);
+    }, []);
+
+    return <span
+        onContextMenu={onContextMenu}
+        onTouchStart={onTouchStart}
+        onTouchMove={onTouchCancel}
+        onTouchCancel={onTouchCancel}
+        onTouchEnd={onTouchCancel}>{props.children}</span>;
 }
 
 export default ContextMenuTrigger;

@@ -1,6 +1,6 @@
 {
   "name": "preact-context-menu",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "A context menu in Preact",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -18,7 +18,7 @@
   "readme": "README.md",
   "contributors": [
     "Martin Löffler <me@fatalerrorcoded.eu> (https://fatalerrorcoded.eu/)",
-    "Paul Makles (https://insrt.uk/)"
+    "Paul Makles <me@insrt.uk> (https://insrt.uk/)"
   ],
   "license": "MIT",
   "private": false,
