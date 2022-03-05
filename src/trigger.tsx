@@ -1,5 +1,5 @@
 import { h, ComponentChildren, JSX } from "preact";
-import { useCallback, useEffect, useRef } from "preact/hooks";
+import { useCallback, useRef } from "preact/hooks";
 
 import { openContextMenu } from "./util";
 
@@ -25,7 +25,6 @@ const ContextMenuTrigger = (props: ContextMenuTriggerProps) => {
         event.preventDefault();
     }, [props.id, props.data]);
 
-    const ref = useRef<HTMLSpanElement>(null);
     const timeoutRef = useRef<number>();
 
     // On iOS devices, we need to manually handle the touch events.
@@ -47,26 +46,12 @@ const ContextMenuTrigger = (props: ContextMenuTriggerProps) => {
         clearTimeout(timeoutRef.current);
     }, []);
 
-    // Bind events directly, since Preact has some trouble here.
-    useEffect(() => {
-        if (ref.current) {
-            ref.current.addEventListener('touchstart', onTouchStart, { passive: true });
-            ref.current.addEventListener('touchcancel', onTouchCancel, { passive: true });
-            ref.current.addEventListener('touchmove', onTouchCancel, { passive: true });
-            ref.current.addEventListener('touchend', onTouchCancel, { passive: true });
-
-            return () => {
-                ref.current!.removeEventListener('touchstart', onTouchStart);
-                ref.current!.removeEventListener('touchcancel', onTouchCancel);
-                ref.current!.removeEventListener('touchmove', onTouchCancel);
-                ref.current!.removeEventListener('touchend', onTouchCancel);
-            }
-        }
-
-        return () => {};
-    }, [ref]);
-
-    return <span ref={ref} onContextMenu={onContextMenu}>{props.children}</span>;
+    return <span
+        onContextMenu={onContextMenu}
+        onTouchStart={onTouchStart}
+        onTouchMove={onTouchCancel}
+        onTouchCancel={onTouchCancel}
+        onTouchEnd={onTouchCancel}>{props.children}</span>;
 }
 
 export default ContextMenuTrigger;
