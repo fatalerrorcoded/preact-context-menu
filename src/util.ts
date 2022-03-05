@@ -1,4 +1,4 @@
-import { JSX, RefObject } from "preact";
+import { JSX, Ref, RefObject } from "preact";
 import { useCallback, useEffect, useRef } from "preact/hooks";
 import { Coords, contextMenus, menuOffset } from "./menu";
 
@@ -91,5 +91,5 @@ export const useContextMenu = (ref: RefObject<HTMLElement | null>, id: string, d
 export const refContextMenu = (id: string, data?: any, disabled?: boolean, touchTimeout?: number) => {
     const ref = useRef<HTMLElement>(null);
     useContextMenu(ref, id, data, disabled, touchTimeout);
-    return ref;
+    return ref as Ref<HTMLElement>;
 };
