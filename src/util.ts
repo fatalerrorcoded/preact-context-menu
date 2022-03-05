@@ -60,19 +60,20 @@ export const useContextMenu = (ref: RefObject<HTMLElement | null>, id: string, d
 
     // Bind events to given ref.
     useEffect(() => {
-        if (ref.current) {
-            ref.current.addEventListener('contextmenu', onContextMenu);
-            ref.current.addEventListener('touchstart', onTouchStart, { passive: true });
-            ref.current.addEventListener('touchcancel', onTouchCancel, { passive: true });
-            ref.current.addEventListener('touchmove', onTouchCancel, { passive: true });
-            ref.current.addEventListener('touchend', onTouchCancel, { passive: true });
+        const el = ref.current;
+        if (el) {
+            el.addEventListener('contextmenu', onContextMenu);
+            el.addEventListener('touchstart', onTouchStart, { passive: true });
+            el.addEventListener('touchcancel', onTouchCancel, { passive: true });
+            el.addEventListener('touchmove', onTouchCancel, { passive: true });
+            el.addEventListener('touchend', onTouchCancel, { passive: true });
 
             return () => {
-                ref.current!.removeEventListener('contextmenu', onContextMenu);
-                ref.current!.removeEventListener('touchstart', onTouchStart);
-                ref.current!.removeEventListener('touchcancel', onTouchCancel);
-                ref.current!.removeEventListener('touchmove', onTouchCancel);
-                ref.current!.removeEventListener('touchend', onTouchCancel);
+                el.removeEventListener('contextmenu', onContextMenu);
+                el.removeEventListener('touchstart', onTouchStart);
+                el.removeEventListener('touchcancel', onTouchCancel);
+                el.removeEventListener('touchmove', onTouchCancel);
+                el.removeEventListener('touchend', onTouchCancel);
             };
         }
 

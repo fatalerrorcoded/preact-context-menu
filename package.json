@@ -1,6 +1,6 @@
 {
   "name": "preact-context-menu",
-  "version": "0.3.0-patch.0",
+  "version": "0.3.0-patch.1",
   "description": "A context menu in Preact",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
