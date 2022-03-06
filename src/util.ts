@@ -41,9 +41,6 @@ export const useTriggerEvents = (id: string, data?: any, disabled?: boolean, tou
     // On iOS devices, we need to manually handle the touch events.
     const onTouchStart = (event: JSX.TargetedTouchEvent<HTMLSpanElement>) => {
         if (disabled === true) return;
-        event.stopPropagation();
-        event.preventDefault();
-
         const touch = event.touches[0];
         
         clearTimeout(timeout);
