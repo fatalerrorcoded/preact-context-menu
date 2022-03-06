@@ -1,6 +1,6 @@
 import { h, ComponentChildren } from "preact";
 
-import { refContextMenu } from "./util";
+import { useTriggerEvents } from "./util";
 
 type ContextMenuTriggerProps = {
     id: string,
@@ -16,7 +16,7 @@ type ContextMenuTriggerProps = {
  * @returns Component
  */
 const ContextMenuTrigger = ({ id, data, children, disabled, touchTimeout }: ContextMenuTriggerProps) => {
-    return <span ref={refContextMenu(id, data, disabled, touchTimeout)}>{children}</span>;
+    return <span {...useTriggerEvents(id, data, disabled, touchTimeout)}>{children}</span>;
 }
 
 export default ContextMenuTrigger;

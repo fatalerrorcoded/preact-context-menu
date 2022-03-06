@@ -4,4 +4,4 @@ export { default as ContextMenuTrigger } from './trigger';
 export { default as MenuItem } from './item';
 
 // Re-export utility functions.
-export { openContextMenu, useContextMenu, refContextMenu } from './util';
+export { openContextMenu, useTriggerEvents } from './util';
