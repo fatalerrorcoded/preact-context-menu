@@ -21,6 +21,8 @@ export const openContextMenu = (id: string, data?: any, coords?: Coords) => {
 
 var timeout = 0;
 
+const iOS = () => /(iPad|iPhone|iPod)/g.test(navigator.userAgent) || (navigator.userAgent.includes("Mac") && "ontouchend" in document);
+
 /**
  * Bind context menu events to a Ref.
  * @param ref Ref object
@@ -30,35 +32,40 @@ var timeout = 0;
  * @param touchTimeout Long press duration to show context menu
  */
 export const useTriggerEvents = (id: string, data?: any, disabled?: boolean, touchTimeout = 610) => {
-    // For most browsers, we can use onContextMenu.
-    const onContextMenu = (event: JSX.TargetedMouseEvent<HTMLSpanElement>) => {
-        if (disabled === true) return;
-        openContextMenu(id, data, { x: event.clientX, y: event.clientY });
-        event.stopPropagation();
-        event.preventDefault();
-    };
+    if (iOS()) {
+        // On iOS devices, we need to manually handle the touch events.
+        const onTouchStart = (event: JSX.TargetedTouchEvent<HTMLSpanElement>) => {
+            if (disabled === true) return;
+            const touch = event.touches[0];
+            
+            clearTimeout(timeout);
+            timeout = setTimeout(() => {
+                openContextMenu(id, data, { x: touch.clientX, y: touch.clientY });
+            }, touchTimeout) as unknown as number;
+        };
 
-    // On iOS devices, we need to manually handle the touch events.
-    const onTouchStart = (event: JSX.TargetedTouchEvent<HTMLSpanElement>) => {
-        if (disabled === true) return;
-        const touch = event.touches[0];
-        
-        clearTimeout(timeout);
-        timeout = setTimeout(() => {
-            openContextMenu(id, data, { x: touch.clientX, y: touch.clientY });
-        }, touchTimeout) as unknown as number;
-    };
+        // Cancel context menu if we move, end or cancel the touch.
+        const onTouchCancel = () => {
+            clearTimeout(timeout);
+        };
 
-    // Cancel context menu if we move, end or cancel the touch.
-    const onTouchCancel = () => {
-        clearTimeout(timeout);
-    };
+        return {
+            onTouchStart,
+            onTouchCancel,
+            onTouchMove: onTouchCancel,
+            onTouchEnd: onTouchCancel
+        }
+    } else {
+        // For most browsers, we can use onContextMenu.
+        const onContextMenu = (event: JSX.TargetedMouseEvent<HTMLSpanElement>) => {
+            if (disabled === true) return;
+            openContextMenu(id, data, { x: event.clientX, y: event.clientY });
+            event.stopPropagation();
+            event.preventDefault();
+        };
 
-    return {
-        onContextMenu,
-        onTouchStart,
-        onTouchCancel,
-        onTouchMove: onTouchCancel,
-        onTouchEnd: onTouchCancel
+        return {
+            onContextMenu
+        }
     }
 }

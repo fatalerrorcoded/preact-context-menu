@@ -77,7 +77,7 @@ If you want to avoid wrapping your component in a span that listens for the brow
 
 ```jsx
 import { h } from "preact";
-import { ContextMenu, attachContextMenu } from "preact-context-menu";
+import { ContextMenu, useTriggerEvents } from "preact-context-menu";
 
 function Component() {
     return (
@@ -85,10 +85,10 @@ function Component() {
             <ContextMenu id="unique_id">
                 My Context Menu
             </ContextMenu>
-            <div onContextMenu={attachContextMenu("unique_id")}>
+            <div {...useTriggerEvents("unique_id")}>
                 Right-click me to open context menu!
             </div>
-            <div onContextMenu={attachContextMenu("unique_id", { hello: "Hello, world!" })}>
+            <div {...useTriggerEvents("unique_id", { hello: "Hello, world!" })}>
                 Right-click me to open context menu with data!
             </div>
         </div>
@@ -96,7 +96,7 @@ function Component() {
 }
 ```
 
-#### Opening a menu programatically
+#### Opening a menu programmatically
 
 A context menu can also be opened by calling the openContextMenu function with the context menu ID and optionally any data and/or the coordinates where the context menu should appear
 
